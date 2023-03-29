@@ -1,21 +1,36 @@
 package com.suhun.shop
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import com.suhun.shop.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    var tag:String = MainActivity::class.java.simpleName
+    var isSign:Boolean = false
+    private val startActivityResultLauncher:ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ActivityResultCallback {
+            if(it.resultCode == RESULT_OK){
+                AlertDialog.Builder(this)
+                    .setTitle("Sign Result")
+                    .setMessage("Success")
+                    .setPositiveButton("Ok", null)
+                    .show()
+            }
+        })
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -25,6 +40,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+
+        if(!isSign){
+            val intent:Intent = Intent(this, SignUpActivity::class.java)
+            startActivityResultLauncher.launch(intent)
+        }
 
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
