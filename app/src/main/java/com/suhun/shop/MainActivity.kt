@@ -1,6 +1,7 @@
 package com.suhun.shop
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.ui.AppBarConfiguration
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,11 +25,8 @@ class MainActivity : AppCompatActivity() {
     private val startActivityResultLauncher:ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ActivityResultCallback {
             if(it.resultCode == RESULT_OK){
-                AlertDialog.Builder(this)
-                    .setTitle("Sign Result")
-                    .setMessage("Success")
-                    .setPositiveButton("Ok", null)
-                    .show()
+                Toast.makeText(this, "Success!!!", Toast.LENGTH_LONG)
+
             }
         })
 
@@ -46,10 +45,10 @@ class MainActivity : AppCompatActivity() {
             startActivityResultLauncher.launch(intent)
         }
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAnchorView(R.id.fab)
-                .setAction("Action", null).show()
+        binding.fab.setOnClickListener {
+            val url:String = "https://tw.yahoo.com/"
+            val intent:Intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivityResultLauncher.launch(intent)
         }
     }
 
